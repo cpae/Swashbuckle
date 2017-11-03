@@ -71,20 +71,21 @@ namespace Swashbuckle.Application
             _discoveryPaths = discoveryPaths;
         }
 
-        public void EnableSwaggerUi(Action<SwaggerUiConfig> configure = null)
+        public void EnableSwaggerUi(string routeName = null, Action<SwaggerUiConfig> configure = null)
         {
-            EnableSwaggerUi(DefaultRouteTemplate, configure);
+            EnableSwaggerUi(DefaultRouteTemplate, routeName, configure);
         }
 
         public void EnableSwaggerUi(
             string routeTemplate,
+            string routeName = null,
             Action<SwaggerUiConfig> configure = null)
         {
             var config = new SwaggerUiConfig(_discoveryPaths, _rootUrlResolver);
             if (configure != null) configure(config);
 
             _httpConfig.Routes.MapHttpRoute(
-                name: "swagger_ui" + routeTemplate,
+                name: routeName != null ? routeName : "swagger_ui",
                 routeTemplate: routeTemplate,
                 defaults: null,
                 constraints: new { assetPath = @".+" },
